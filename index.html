@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Kalkulator Zakat Premium | BAZNAS</title>
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Anime.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <!-- CSS External -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="light-mode">
+    <!-- Dark Mode Toggle -->
+    <div class="theme-toggle">
+        <button class="theme-btn active" id="lightModeBtn" onclick="setTheme('light')">
+            <i class="fas fa-sun"></i>
+        </button>
+        <button class="theme-btn" id="darkModeBtn" onclick="setTheme('dark')">
+            <i class="fas fa-moon"></i>
+        </button>
+    </div>
+
+    <!-- Canvas untuk Partikel -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Loading Animation -->
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Floating Ornaments - Jumlah dikurangi untuk mobile -->
+    <div class="ornament ornament-1">✧</div>
+    <div class="ornament ornament-2">۞</div>
+    <div class="ornament ornament-3">☪</div>
+    <div class="ornament ornament-4">✨</div>
+
+    <!-- Main Container -->
+    <div class="zakat-container" id="zakatContainer">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-glow"></div>
+            <div class="badge">
+                <i class="fas fa-mosque"></i> 
+                <span class="badge-text">#ZAKATMENGUATKANINDONESIA</span>
+                <span class="badge-short">#ZMI</span>
+            </div>
+            <h1>
+                Kalkulator <span>Zakat</span>
+            </h1>
+            <p class="desktop-only">Hitung zakat penghasilan dan zakat emas dengan mudah, cepat, dan akurat sesuai syariah</p>
+            <p class="mobile-only">Hitung zakat penghasilan & emas</p>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <div class="calculator-grid">
+                <!-- Form Section -->
+                <div class="card" id="formCard">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-calculator"></i>
+                            <h2>Form Perhitungan</h2>
+                        </div>
+                    </div>
+
+                    <!-- Zakat Type Selector -->
+                    <div class="type-selector">
+                        <button class="type-btn active" id="btnPenghasilan">
+                            <i class="fas fa-money-bill-wave"></i>
+                            <span class="btn-text">Zakat Penghasilan</span>
+                            <span class="btn-short">Penghasilan</span>
+                        </button>
+                        <button class="type-btn" id="btnEmas">
+                            <i class="fas fa-coins"></i>
+                            <span class="btn-text">Zakat Emas</span>
+                            <span class="btn-short">Emas</span>
+                        </button>
+                    </div>
+
+                    <!-- Form Penghasilan -->
+                    <div id="formPenghasilan" class="form-active">
+                        <div class="input-group">
+                            <label>
+                                <i class="fas fa-money-bill-wave"></i>
+                                <span class="label-text">Gaji per Bulan</span>
+                                <span class="label-short">Gaji</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-money-bill"></i>
+                                <input type="number" id="gaji" class="input-field" placeholder="0" min="0" value="5000000">
+                                <span class="currency-badge">Rp</span>
+                            </div>
+                        </div>
+
+                        <div class="input-group">
+                            <label>
+                                <i class="fas fa-coins"></i>
+                                <span class="label-text">Penghasilan Lain</span>
+                                <span class="label-short">Lainnya</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-coins"></i>
+                                <input type="number" id="penghasilanLain" class="input-field" placeholder="0" min="0" value="1000000">
+                                <span class="currency-badge">Rp</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Form Emas -->
+                    <div id="formEmas" style="display: none;">
+                        <div class="input-group">
+                            <label>
+                                <i class="fas fa-weight-hanging"></i>
+                                <span class="label-text">Jumlah Emas (gram)</span>
+                                <span class="label-short">Emas (gr)</span>
+                            </label>
+                            <div class="input-wrapper">
+                                <i class="fas fa-weight-hanging"></i>
+                                <input type="number" id="jumlahEmas" class="input-field" placeholder="0" min="0" value="100" step="0.1">
+                                <span class="currency-badge">gr</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Harga Emas -->
+                    <div class="input-group">
+                        <label>
+                            <i class="fas fa-gem"></i>
+                            <span class="label-text">Harga Emas per Gram</span>
+                            <span class="label-short">Harga/gr</span>
+                        </label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-gem"></i>
+                            <input type="number" id="hargaEmas" class="input-field" placeholder="0" min="0" value="1078000" step="1000">
+                            <span class="currency-badge">Rp</span>
+                        </div>
+                    </div>
+
+                    <!-- Info Card -->
+                    <div class="info-card">
+                        <i class="fas fa-info-circle"></i>
+                        <p class="desktop-only">Nisab zakat adalah 85 gram emas. Jika total harta mencapai atau melebihi nisab, maka wajib zakat 2.5%.</p>
+                        <p class="mobile-only">Nisab: 85gr emas • Zakat: 2.5%</p>
+                    </div>
+
+                    <!-- Calculate Button -->
+                    <button class="calculate-btn" id="hitungBtn">
+                        <i class="fas fa-calculator"></i>
+                        <span class="btn-text">Hitung Zakat</span>
+                        <span class="btn-short">Hitung</span>
+                    </button>
+                </div>
+
+                <!-- Result Section -->
+                <div class="card" id="resultCard">
+                    <div class="card-header">
+                        <div class="card-title">
+                            <i class="fas fa-chart-pie"></i>
+                            <h2>Hasil Perhitungan</h2>
+                        </div>
+                    </div>
+
+                    <div class="result-section">
+                        <div class="result-grid">
+                            <div class="result-item">
+                                <span class="result-label">
+                                    <i class="fas fa-layer-group"></i>
+                                    <span class="label-text">Total Harta</span>
+                                    <span class="label-short">Total</span>
+                                </span>
+                                <span class="result-value" id="totalHarta">Rp 6.000.000</span>
+                            </div>
+
+                            <div class="result-item">
+                                <span class="result-label">
+                                    <i class="fas fa-balance-scale"></i>
+                                    <span class="label-text">Nilai Nisab</span>
+                                    <span class="label-short">Nisab</span>
+                                </span>
+                                <span class="result-value" id="nilaiNisab">Rp 91.630.000</span>
+                            </div>
+                        </div>
+
+                        <div class="nisab-info">
+                            <div class="nisab-row">
+                                <span>Nisab (85g):</span>
+                                <span id="nisabGram">85 gram</span>
+                            </div>
+                            <div class="nisab-row">
+                                <span>Harga/gram:</span>
+                                <span id="hargaEmasDisplay">Rp 1.078.000</span>
+                            </div>
+                        </div>
+
+                        <div id="statusContainer" class="status-container">
+                            <!-- Status akan diisi JS -->
+                        </div>
+
+                        <div class="zakat-amount" id="zakatAmount">
+                            <div class="label">Zakat yang Harus Dibayar</div>
+                            <div class="amount" id="jumlahZakat">Rp 0</div>
+                        </div>
+
+                        <div class="footer-note">
+                            <i class="fas fa-clock"></i>
+                            <span>Nisab 85g emas • 2.5%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <i class="fas fa-mosque"></i>
+                <p>© 1446 H / 2025 M - Kalkulator Zakat Premium BAZNAS</p>
+                <i class="fas fa-star"></i>
+            </div>
+            <p class="footer-mobile">© 2025 • Kalkulator Zakat</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript External -->
+    <script src="script.js"></script>
+</body>
+</html>
